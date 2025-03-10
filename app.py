@@ -5,30 +5,23 @@ from pinecone import Pinecone
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
-# 🔹 Updated Index Name
-INDEX_NAME = "brain-box"  # Changed from "sample-index-384" to "brain-box"
+INDEX_NAME = "brain-box"  
 
-# Initialize Pinecone
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index = pc.Index(INDEX_NAME)
 
-# Initialize embedding model
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-# Flask app
 app = Flask(__name__, template_folder="templates", static_folder="static")
-CORS(app)  # Enable CORS for frontend-backend communication
+CORS(app)  
 
-# ✅ Serve index.html
 @app.route("/")
 def serve_frontend():
-    return render_template("index.html")  # Flask will find it in "templates/"
+    return render_template("index.html")  
 
-# ✅ Query Route
 @app.route("/query", methods=["POST"])
 def query_courses():
     data = request.json
@@ -38,13 +31,10 @@ def query_courses():
         return jsonify({"error": "No query provided"}), 400
 
     try:
-        # Convert query to embeddings
-        query_vector = embedding_model.embed_documents([user_query])[0]  # Fixed embedding method
+        query_vector = embedding_model.embed_documents([user_query])[0]  
 
-        # Search in Pinecone
         results = index.query(vector=query_vector, top_k=5, include_metadata=True)
 
-        # Format response
         courses = [
             {
                 "title": res["metadata"].get("title", "N/A"),
@@ -53,7 +43,7 @@ def query_courses():
                 "link": res["metadata"].get("link", "#"),
                 "score": res["score"],
             }
-            for res in results.get("matches", [])  # Avoids errors if "matches" key is missing
+            for res in results.get("matches", [])  
         ]
 
         return jsonify({"query": user_query, "results": courses})
@@ -61,6 +51,5 @@ def query_courses():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Run the app
 if __name__ == "__main__":
     app.run(debug=True)

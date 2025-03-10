@@ -4,7 +4,6 @@ function sendMessage() {
 
     let chatBox = document.getElementById("chat-box");
 
-    // Add user message to chat
     let userMessage = document.createElement("div");
     userMessage.classList.add("user-message");
     userMessage.innerText = userInput;
@@ -12,11 +11,11 @@ function sendMessage() {
 
     document.getElementById("user-input").value = ""; // Clear input
 
-    // Call backend API with the correct endpoint and request format
+
     fetch("http://127.0.0.1:5000/query", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: userInput }) // Corrected key from 'question' to 'query'
+            body: JSON.stringify({ query: userInput })
         })
         .then(response => response.json())
         .then(data => {
