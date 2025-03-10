@@ -1,0 +1,39 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore environment variables and credentials
+.env
+
+# Ignore logs and temp files
+*.log
+*.tmp
+
+# Ignore compiled code and system files
+*.exe
+chromedriver-win64/
+chromedriver.exe
+
+# Ignore data files
+brainlox_courses/
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Ignore dependencies (if using pipenv or poetry)
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Ignore vector database files (if applicable)
+*.db
+*.sqlite
+*.json
